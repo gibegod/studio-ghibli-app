@@ -3,6 +3,7 @@ package com.example.studioghibliapp;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmViewHolder
     @Override
     public void onBindViewHolder(@NonNull FilmViewHolder holder, int position) {
         holder.tvTitle.setText(films.get(position).getTitle());
-        holder.tvDescription.setText(films.get(position).getDescription());
+        holder.tvDirector.setText(films.get(position).getDirector());
+        holder.tvReleaseDate.setText(films.get(position).getReleaseDate());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,12 +48,14 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmViewHolder
 
     public class FilmViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
-        TextView tvDescription;
+        TextView tvDirector;
+        TextView tvReleaseDate;
 
         public FilmViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_title);
-            tvDescription = itemView.findViewById(R.id.tv_description);
+            tvDirector = itemView.findViewById(R.id.tv_director);
+            tvReleaseDate = itemView.findViewById(R.id.tv_release_date);
         }
     }
 
