@@ -5,15 +5,19 @@ public class FilmModel {
     private String title;
     private String image;
     private String description;
+    private String director;
+    private String releaseDate;
 
     public FilmModel() {
     }
 
-    public FilmModel(String id, String title, String image, String description) {
+    public FilmModel(String id, String title, String image, String description, String director, String releaseDate) {
         this.id = id;
         this.title = title;
         this.image = image;
         this.description = description;
+        this.director = director;
+        this.releaseDate = releaseDate;
     }
 
     public String getId() {
@@ -46,5 +50,21 @@ public class FilmModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

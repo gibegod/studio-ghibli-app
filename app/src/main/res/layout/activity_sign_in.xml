@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    tools:context=".SignInActivity"
     android:orientation="vertical">
 
     <include
@@ -35,21 +35,21 @@
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_sign_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/blue_green"
         android:textColor="@color/black"
-        android:text="Iniciar sesión"
-        android:layout_marginTop="10dp"/>
+        android:text="Registrarse"
+        android:layout_marginTop="10dp" />
 
     <TextView
-        android:id="@+id/tv_sign_in"
+        android:id="@+id/tv_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15dp"
-        android:text="No tenés un usuario? Registrate!"
-        android:layout_marginTop="5dp"
-        />
+        android:text="Ya tenés un usuario? Iniciá sesión!"
+        android:layout_marginTop="5dp" />
+
 
 </LinearLayout>
