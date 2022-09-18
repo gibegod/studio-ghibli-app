@@ -1,6 +1,6 @@
-package com.example.studioghibliapp;
+package com.example.studioghibliapp.models;
 
-public class FilmModel {
+public class Film {
     private String id;
     private String title;
     private String image;
@@ -8,10 +8,10 @@ public class FilmModel {
     private String director;
     private String releaseDate;
 
-    public FilmModel() {
+    public Film() {
     }
 
-    public FilmModel(String id, String title, String image, String description, String director, String releaseDate) {
+    public Film(String id, String title, String image, String description, String director, String releaseDate) {
         this.id = id;
         this.title = title;
         this.image = image;
