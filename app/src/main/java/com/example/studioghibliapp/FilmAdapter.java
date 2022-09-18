@@ -3,20 +3,21 @@ package com.example.studioghibliapp;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.studioghibliapp.models.Film;
+
 import java.util.List;
 
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmViewHolder> {
 
-    private List<FilmModel> films;
+    private List<Film> films;
     private OnItemClickListener onItemClickListener;
 
-    public FilmAdapter(List<FilmModel> films, OnItemClickListener onItemClickListener) {
+    public FilmAdapter(List<Film> films, OnItemClickListener onItemClickListener) {
         this.films = films;
         this.onItemClickListener = onItemClickListener;
     }
@@ -60,7 +61,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmViewHolder
     }
 
     interface OnItemClickListener {
-        void onItemClickListener(FilmModel film);
+        void onItemClickListener(Film film);
     }
 }
 

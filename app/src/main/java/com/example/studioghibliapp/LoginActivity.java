@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.studioghibliapp.models.User;
+
 public class LoginActivity extends AppCompatActivity {
     Toolbar toolbar;
     Button btnLogin;
