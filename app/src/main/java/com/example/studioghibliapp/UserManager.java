@@ -66,6 +66,19 @@ public class UserManager {
         return result;
     }
 
+    public boolean logInUser(User user) throws Exception {
+        boolean logUser = false;
+
+        QueryBuilder<User, Integer> userQb = dao.queryBuilder();
+        userQb.where().eq("username", user.getUsername());
+
+        if(!userQb.query().isEmpty() && userQb.query().get(0).getPassword().equals(user.getPassword())) {
+            logUser = true;
+        }
+
+        return logUser;
+    }
+
     public void createUser(User user) throws Exception {
         dao.create(user);
     }
