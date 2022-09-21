@@ -46,9 +46,16 @@ public class SignInActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Validations
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                String username = etUsername.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
+
+                if(username == "" || password == "") {
+                    Toast.makeText(SignInActivity.this, "Complete ambos campos para registrarse", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if(password.length() < 4) {
+                    Toast.makeText(SignInActivity.this, "La contraseña debe tener mínimo 4 caracteres", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 User user = new User();
                 user.setUsername(username);
