@@ -49,7 +49,8 @@ public class SignInActivity extends AppCompatActivity {
                 String username = etUsername.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
 
-                if(username == "" || password == "") {
+                Log.i("username", username);
+                if(username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignInActivity.this, "Complete ambos campos para registrarse", Toast.LENGTH_SHORT).show();
                     return;
                 } else if(password.length() < 4) {
