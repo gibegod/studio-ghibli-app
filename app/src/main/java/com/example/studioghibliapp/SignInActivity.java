@@ -53,7 +53,6 @@ public class SignInActivity extends AppCompatActivity {
                 String username = etUsername.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
 
-                Log.i("username", username);
                 if(username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignInActivity.this, "Complete ambos campos para registrarse", Toast.LENGTH_SHORT).show();
                     return;
@@ -69,7 +68,7 @@ public class SignInActivity extends AppCompatActivity {
                 try {
                     boolean userExistsInDB = UserManager.getInstance(SignInActivity.this).userExistsInDB(user.getUsername());
 
-                    if(userExistsInDB == false) {
+                    if(userExistsInDB == true) {
                         Toast.makeText(SignInActivity.this, "Ya existe un usuario con ese nombre", Toast.LENGTH_LONG).show();
                         return;
                     }
