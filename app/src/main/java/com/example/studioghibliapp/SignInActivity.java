@@ -29,6 +29,13 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        initialSetup();
+
+        handleOnClickTvLogin();
+        handleOnClickBtnSignIn();
+    }
+
+    private void initialSetup() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Registro");
@@ -37,9 +44,6 @@ public class SignInActivity extends AppCompatActivity {
         tvLogin = findViewById(R.id.tv_login);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
-
-        handleOnClickTvLogin();
-        handleOnClickBtnSignIn();
     }
 
     private void handleOnClickBtnSignIn() {
@@ -63,11 +67,9 @@ public class SignInActivity extends AppCompatActivity {
                 user.setPassword(password);
 
                 try {
-                    // TODO: Get user by username
-                    List<User> users = UserManager.getInstance(SignInActivity.this).getUsers();
-                    List<User> usersWithSameUsername = users.stream().filter(u -> u.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+                    boolean userExistsInDB = UserManager.getInstance(SignInActivity.this).userExistsInDB(user.getUsername());
 
-                    if(!usersWithSameUsername.isEmpty()) {
+                    if(userExistsInDB == false) {
                         Toast.makeText(SignInActivity.this, "Ya existe un usuario con ese nombre", Toast.LENGTH_LONG).show();
                         return;
                     }
