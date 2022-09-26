@@ -4,10 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,11 +21,20 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvSignIn;
     EditText etUsername;
     EditText etPassword;
+    CheckBox cbRememberUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        SharedPreferences sp = getApplicationContext().getSharedPreferences(Consts.SP_CREDENTIALS, MODE_PRIVATE);
+        String savedUser = sp.getString(Consts.USER, null);
+        String savedPassword = sp.getString(Consts.PASSWORD, null);
+
+        if(savedUser != null && savedPassword != null) {
+            startMainActiviy();
+        }
 
         initialSetup();
 
@@ -41,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         tvSignIn = findViewById(R.id.tv_sign_in);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
+        cbRememberUser = findViewById(R.id.cb_remember_user);
     }
 
     private void handleOnClickTvSignin() {
@@ -77,25 +88,26 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
 
-                    Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(mainActivity);
-                    finish();
+                    if(cbRememberUser.isChecked()) {
+                        SharedPreferences sp = getApplicationContext().getSharedPreferences(Consts.SP_CREDENTIALS, MODE_PRIVATE);
+                        SharedPreferences.Editor spEditor = sp.edit();
+                        spEditor.putString(Consts.USER, username);
+                        spEditor.putString(Consts.PASSWORD, password);
+                        spEditor.apply();
+                    }
+
+                    startMainActiviy();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-
-
-
-                Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(mainActivity);
-                finish();
             }
         });
     }
 
-
-
-
+    private void startMainActiviy() {
+        Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(mainActivity);
+        finish();
+    }
 }

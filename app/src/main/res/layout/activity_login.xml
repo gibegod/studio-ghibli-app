@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="17dp"
+        android:textSize="17sp"
         android:text="Usuario" />
 
     <EditText
@@ -25,7 +25,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="17dp"
+        android:textSize="17sp"
         android:text="Contraseña" />
 
     <EditText
@@ -33,6 +33,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword" />
+
+    <CheckBox
+        android:id="@+id/cb_remember_user"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Recordar usuario" />
 
     <Button
         android:id="@+id/btn_login"
