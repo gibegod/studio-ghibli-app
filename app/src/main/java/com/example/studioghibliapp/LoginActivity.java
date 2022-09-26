@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         String savedPassword = sp.getString(Consts.PASSWORD, null);
 
         if(savedUser != null && savedPassword != null) {
-            startMainActiviy();
+            startMainActivity();
         }
 
         initialSetup();
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                         spEditor.apply();
                     }
 
-                    startMainActiviy();
+                    startMainActivity();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void startMainActiviy() {
+    private void startMainActivity() {
         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(mainActivity);
         finish();
