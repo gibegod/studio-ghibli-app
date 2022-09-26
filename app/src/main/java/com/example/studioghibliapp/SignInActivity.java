@@ -29,6 +29,13 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        initialSetup();
+
+        handleOnClickTvLogin();
+        handleOnClickBtnSignIn();
+    }
+
+    private void initialSetup() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Registro");
@@ -37,29 +44,31 @@ public class SignInActivity extends AppCompatActivity {
         tvLogin = findViewById(R.id.tv_login);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
-
-        handleOnClickTvLogin();
-        handleOnClickBtnSignIn();
     }
 
     private void handleOnClickBtnSignIn() {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Validations
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                String username = etUsername.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
+
+                if(username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(SignInActivity.this, "Complete ambos campos para registrarse", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if(password.length() < 4) {
+                    Toast.makeText(SignInActivity.this, "La contraseña debe tener mínimo 4 caracteres", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 User user = new User();
                 user.setUsername(username);
                 user.setPassword(password);
 
                 try {
-                    // TODO: Get user by username
-                    List<User> users = UserManager.getInstance(SignInActivity.this).getUsers();
-                    List<User> usersWithSameUsername = users.stream().filter(u -> u.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+                    boolean userExistsInDB = UserManager.getInstance(SignInActivity.this).userExistsInDB(user.getUsername());
 
-                    if(!usersWithSameUsername.isEmpty()) {
+                    if(userExistsInDB == true) {
                         Toast.makeText(SignInActivity.this, "Ya existe un usuario con ese nombre", Toast.LENGTH_LONG).show();
                         return;
                     }
