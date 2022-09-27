@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.studioghibliapp.models.Film;
 
@@ -67,6 +70,45 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
         rvFilms.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item){
+        switch (item.getItemId()){
+            //Realizar accion
+            case R.id.item_exit:
+                Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.item_Personajes:
+                Intent intent0 = new Intent (MainActivity.this, PersonajesActivity.class );
+                startActivity(intent0);
+                break;
+
+            case R.id.item_Vehiculos:
+                Intent intent1 = new Intent (MainActivity.this, VehiculosActivity.class );
+                startActivity(intent1);
+                break;
+
+            case R.id.item_Especies:
+                Intent intent2 = new Intent (MainActivity.this, EspeciesActivity.class );
+                startActivity(intent2);
+                break;
+
+            case R.id.item_Lugares:
+                Intent intent3 = new Intent (MainActivity.this, LugaresActivity.class );
+                startActivity(intent3);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private List<Film> getFilms() {

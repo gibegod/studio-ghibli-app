@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/item_exit"
+        android:title="@string/texto_item_exit"
+        android:icon="@drawable/ic_exit"
+        app:showAsAction="always"
+        />
+
+
+    <item
+        android:id="@+id/item_Personajes"
+        android:title="@string/texto_item_Personajes"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/item_Vehiculos"
+        android:title="@string/texto_item_Vehiculos"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/item_Especies"
+        android:title="@string/texto_item_Especies"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/item_Lugares"
+        android:title="@string/texto_item_Lugares"
+        app:showAsAction="never"/>
+
+
+</menu>
+
