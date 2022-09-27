@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Studio Ghibli App</string>
+    <string name="texto_item_Personajes">Personajes</string>
+    <string name="texto_item_Vehiculos">Vehiculos</string>
+    <string name="texto_item_Especies">Especies</string>
+    <string name="texto_item_Lugares">Lugares</string>
+    <string name="texto_item_exit">exit</string>
 </resources>
