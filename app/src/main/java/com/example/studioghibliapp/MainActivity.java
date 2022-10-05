@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,6 +83,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (item.getItemId()){
             //Realizar accion
             case R.id.item_exit:
+                SharedPreferences sp = getApplicationContext().getSharedPreferences(Consts.SP_CREDENTIALS, MODE_PRIVATE);
+                SharedPreferences.Editor spEditor = sp.edit();
+                spEditor.putString(Consts.USER, null);
+                spEditor.putString(Consts.PASSWORD, null);
+                spEditor.apply();
+
                 Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
