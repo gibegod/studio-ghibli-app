@@ -1,12 +1,10 @@
 package com.example.studioghibliapp
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import com.example.studioghibliapp.models.Film
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -25,7 +23,6 @@ class FilmDetailsActivity : AppCompatActivity() {
     lateinit var tvProducer: TextView
     lateinit var tvScore: TextView
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_film_details)
