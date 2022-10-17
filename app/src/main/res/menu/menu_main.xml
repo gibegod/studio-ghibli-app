@@ -33,7 +33,7 @@
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/item_Lugares"
+        android:id="@+id/item_locations"
         android:title="@string/texto_item_Lugares"
         app:showAsAction="never"/>
 

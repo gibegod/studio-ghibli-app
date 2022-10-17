@@ -1,6 +1,7 @@
 package com.example.studioghibliapp
 
 import com.example.studioghibliapp.models.Film
+import com.example.studioghibliapp.models.Location
 import com.example.studioghibliapp.models.People
 import retrofit2.Call
 import retrofit2.http.GET
@@ -16,4 +17,7 @@ interface StudioGhibliAPI {
 
     @GET("/people")
     fun getPeople(): Call<List<People>>
+
+    @GET("/locations")
+    fun getLocations(): Call<List<Location>>
 }

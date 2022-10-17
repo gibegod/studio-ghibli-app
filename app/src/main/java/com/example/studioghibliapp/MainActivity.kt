@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
+import com.example.studioghibliapp.models.Location
 import com.example.studioghibliapp.models.People
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -122,6 +123,31 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    private fun setupAdapterLocations() {
+        var responseList: MutableList<Location> = mutableListOf()
+
+        val api = retrofit.create(StudioGhibliAPI::class.java)
+        val callGetLocations = api.getLocations()
+        callGetLocations.enqueue(object: Callback<List<Location>?> {
+            override fun onResponse(call: Call<List<Location>?>, response: Response<List<Location>?>) {
+                val locationsRest = response.body()
+
+                locationsRest?.forEach {
+                    var location = Location(it.id, it.name)
+                    responseList.add(location)
+                }
+
+                LocationAdapter(responseList) {}.let {
+                    rvItems.adapter = it
+                }
+            }
+
+            override fun onFailure(call: Call<List<Location>?>, t: Throwable) {
+                Log.e("REST", t.message?: "")
+            }
+        })
+    }
+
     private fun setupAdapter() {
         var emptyFilmList: MutableList<Film> = mutableListOf()
 
@@ -171,9 +197,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val intent2 = Intent(this@MainActivity, EspeciesActivity::class.java)
                 startActivity(intent2)
             }
-            R.id.item_Lugares -> {
-                val intent3 = Intent(this@MainActivity, LugaresActivity::class.java)
-                startActivity(intent3)
+            R.id.item_locations -> {
+                setupAdapterLocations();
+                supportActionBar!!.title = "Lugares"
             }
         }
         return super.onOptionsItemSelected(item)
