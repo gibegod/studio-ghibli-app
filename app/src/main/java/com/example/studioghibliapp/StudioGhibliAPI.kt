@@ -21,4 +21,7 @@ interface StudioGhibliAPI {
 
     @GET("/vehicles")
     fun getVehicles(): Call<List<Vehicle>>
+
+    @GET("/species")
+    fun getSpecies(): Call<List<Species>>
 }

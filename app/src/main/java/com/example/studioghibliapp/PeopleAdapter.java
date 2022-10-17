@@ -32,7 +32,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleView
     @Override
     public void onBindViewHolder(@NonNull PeopleViewHolder holder, int position) {
         holder.tvName.setText(peopleList.get(position).getName());
-        holder.tvAge.setText(peopleList.get(position).getAge());
+        holder.tvAge.setText("Edad: " + peopleList.get(position).getAge());
         holder.tvGender.setText(peopleList.get(position).getGender());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

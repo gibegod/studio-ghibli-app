@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.widget.Spinner
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import com.example.studioghibliapp.models.Film
 import android.content.Intent
 import androidx.recyclerview.widget.DividerItemDecoration
 import android.util.Log
@@ -18,9 +17,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
-import com.example.studioghibliapp.models.Location
-import com.example.studioghibliapp.models.People
-import com.example.studioghibliapp.models.Vehicle
+import com.example.studioghibliapp.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -171,6 +168,30 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    private fun setupAdapterSpeciesList() {
+        var responseList: MutableList<Species> = mutableListOf()
+
+        val callGetSpeciesList = api.getSpecies()
+        callGetSpeciesList.enqueue(object: Callback<List<Species>?> {
+            override fun onResponse(call: Call<List<Species>?>, response: Response<List<Species>?>) {
+                val speciesListRest = response.body()
+
+                speciesListRest?.forEach {
+                    var species = Species(it.id, it.name, it.classification)
+                    responseList.add(species)
+                }
+
+                SpeciesAdapter(responseList) {}.let {
+                    rvItems.adapter = it
+                }
+            }
+
+            override fun onFailure(call: Call<List<Species>?>, t: Throwable) {
+                Log.e("REST", t.message?: "")
+            }
+        })
+    }
+
     private fun setupAdapter() {
         var emptyFilmList: MutableList<Film> = mutableListOf()
 
@@ -216,9 +237,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 setupAdapterVehicles()
                 supportActionBar!!.title = "Vehículos"
             }
-            R.id.item_Especies -> {
-                val intent2 = Intent(this@MainActivity, EspeciesActivity::class.java)
-                startActivity(intent2)
+            R.id.item_species -> {
+                setupAdapterSpeciesList()
+                supportActionBar!!.title = "Especies"
             }
             R.id.item_locations -> {
                 setupAdapterLocations();
