@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.widget.Spinner
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import com.example.studioghibliapp.models.Film
 import android.content.Intent
 import androidx.recyclerview.widget.DividerItemDecoration
 import android.util.Log
@@ -18,6 +17,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
+import com.example.studioghibliapp.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,10 +28,10 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var layout: LinearLayout
     lateinit var toolbar: Toolbar
-    lateinit var rvFilms: RecyclerView
-    lateinit var adapter: FilmAdapter
+    lateinit var rvItems: RecyclerView
     private lateinit var itemsSelector: Spinner
     var itemsSelectorOptions = arrayOf<String?>("5", "10", "50")
+    private val api: StudioGhibliAPI = retrofit.create(StudioGhibliAPI::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +41,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Peliculas"
 
+        rvItems = findViewById(R.id.rv_items)
+
         setupAdapter()
-        setupAdapterRESTService()
+        setupAdapterFilms()
 
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         itemsSelector = findViewById(R.id.sp_items_selector)
@@ -56,10 +58,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         itemsSelector.adapter = aa
     }
 
-    private fun setupAdapterRESTService() {
+    private fun setupAdapterFilms() {
         var responseList: MutableList<Film> = mutableListOf()
 
-        val api = retrofit.create(StudioGhibliAPI::class.java)
         val callGetFilms = api.getFilms()
         callGetFilms.enqueue(object: Callback<List<Film>?> {
             override fun onResponse(call: Call<List<Film>?>, response: Response<List<Film>?>) {
@@ -80,13 +81,12 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     responseList.add(film)
                 }
 
-                rvFilms = findViewById(R.id.rv_films)
                 FilmAdapter(responseList) {
                     val filmDetailsActivity = Intent(this@MainActivity, FilmDetailsActivity::class.java)
                     filmDetailsActivity.putExtra("FilmID", it.id)
                     startActivity(filmDetailsActivity)
                 }.let {
-                    rvFilms.adapter = it
+                    rvItems.adapter = it
                 }
             }
 
@@ -96,21 +96,116 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    private fun setupAdapterPeopleList() {
+        var responseList: MutableList<People> = mutableListOf()
+
+        val callGetPeopleList = api.getPeople()
+        callGetPeopleList.enqueue(object: Callback<List<People>?> {
+            override fun onResponse(call: Call<List<People>?>, response: Response<List<People>?>) {
+                val peopleRest = response.body()
+
+                peopleRest?.forEach {
+                    var people = People(it.id, it.name, it.gender, it.age)
+                    responseList.add(people)
+                }
+
+                PeopleAdapter(responseList) {}.let {
+                    rvItems.adapter = it
+                }
+            }
+
+            override fun onFailure(call: Call<List<People>?>, t: Throwable) {
+                Log.e("REST", t.message?: "")
+            }
+        })
+    }
+
+    private fun setupAdapterLocations() {
+        var responseList: MutableList<Location> = mutableListOf()
+
+        val callGetLocations = api.getLocations()
+        callGetLocations.enqueue(object: Callback<List<Location>?> {
+            override fun onResponse(call: Call<List<Location>?>, response: Response<List<Location>?>) {
+                val locationsRest = response.body()
+
+                locationsRest?.forEach {
+                    var location = Location(it.id, it.name)
+                    responseList.add(location)
+                }
+
+                LocationAdapter(responseList) {}.let {
+                    rvItems.adapter = it
+                }
+            }
+
+            override fun onFailure(call: Call<List<Location>?>, t: Throwable) {
+                Log.e("REST", t.message?: "")
+            }
+        })
+    }
+
+    private fun setupAdapterVehicles() {
+        var responseList: MutableList<Vehicle> = mutableListOf()
+
+        val callGetVehicles = api.getVehicles()
+        callGetVehicles.enqueue(object: Callback<List<Vehicle>?> {
+            override fun onResponse(call: Call<List<Vehicle>?>, response: Response<List<Vehicle>?>) {
+                val vehiclesRest = response.body()
+
+                vehiclesRest?.forEach {
+                    var vehicle = Vehicle(it.id, it.name, it.description, it.vehicle_class)
+                    responseList.add(vehicle)
+                }
+
+                VehicleAdapter(responseList) {}.let {
+                    rvItems.adapter = it
+                }
+            }
+
+            override fun onFailure(call: Call<List<Vehicle>?>, t: Throwable) {
+                Log.e("REST", t.message?: "")
+            }
+        })
+    }
+
+    private fun setupAdapterSpeciesList() {
+        var responseList: MutableList<Species> = mutableListOf()
+
+        val callGetSpeciesList = api.getSpecies()
+        callGetSpeciesList.enqueue(object: Callback<List<Species>?> {
+            override fun onResponse(call: Call<List<Species>?>, response: Response<List<Species>?>) {
+                val speciesListRest = response.body()
+
+                speciesListRest?.forEach {
+                    var species = Species(it.id, it.name, it.classification)
+                    responseList.add(species)
+                }
+
+                SpeciesAdapter(responseList) {}.let {
+                    rvItems.adapter = it
+                }
+            }
+
+            override fun onFailure(call: Call<List<Species>?>, t: Throwable) {
+                Log.e("REST", t.message?: "")
+            }
+        })
+    }
+
     private fun setupAdapter() {
         var emptyFilmList: MutableList<Film> = mutableListOf()
 
-        rvFilms = findViewById(R.id.rv_films)
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 FilmAdapter(emptyFilmList) {}.let {
-                    rvFilms.adapter = it
+                    rvItems.adapter = it
                 }
             }
         }
 
         layout = findViewById(R.id.ll_layout)
-        val dividerItemDecoration = DividerItemDecoration(rvFilms.context, layout.orientation)
-        rvFilms.addItemDecoration(dividerItemDecoration)
+        val dividerItemDecoration = DividerItemDecoration(rvItems.context, layout.orientation)
+        rvItems.addItemDecoration(dividerItemDecoration)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -130,21 +225,25 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
-            R.id.item_Personajes -> {
-                val intent0 = Intent(this@MainActivity, PersonajesActivity::class.java)
-                startActivity(intent0)
+            R.id.item_films -> {
+                setupAdapterFilms();
+                supportActionBar!!.title = "Peliculas"
             }
-            R.id.item_Vehiculos -> {
-                val intent1 = Intent(this@MainActivity, VehiculosActivity::class.java)
-                startActivity(intent1)
+            R.id.item_people -> {
+                setupAdapterPeopleList();
+                supportActionBar!!.title = "Personajes"
             }
-            R.id.item_Especies -> {
-                val intent2 = Intent(this@MainActivity, EspeciesActivity::class.java)
-                startActivity(intent2)
+            R.id.item_vehicles -> {
+                setupAdapterVehicles()
+                supportActionBar!!.title = "Vehículos"
             }
-            R.id.item_Lugares -> {
-                val intent3 = Intent(this@MainActivity, LugaresActivity::class.java)
-                startActivity(intent3)
+            R.id.item_species -> {
+                setupAdapterSpeciesList()
+                supportActionBar!!.title = "Especies"
+            }
+            R.id.item_locations -> {
+                setupAdapterLocations();
+                supportActionBar!!.title = "Lugares"
             }
         }
         return super.onOptionsItemSelected(item)

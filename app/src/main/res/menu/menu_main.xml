@@ -2,36 +2,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <item
         android:id="@+id/item_exit"
         android:title="@string/texto_item_exit"
         android:icon="@drawable/ic_exit"
-        app:showAsAction="always"
-        />
-
+        app:showAsAction="always" />
 
     <item
-        android:id="@+id/item_Personajes"
+        android:id="@+id/item_films"
+        android:title="@string/peliculas"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_people"
         android:title="@string/texto_item_Personajes"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 
     <item
-        android:id="@+id/item_Vehiculos"
+        android:id="@+id/item_vehicles"
         android:title="@string/texto_item_Vehiculos"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/item_Especies"
+        android:id="@+id/item_species"
         android:title="@string/texto_item_Especies"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/item_Lugares"
+        android:id="@+id/item_locations"
         android:title="@string/texto_item_Lugares"
         app:showAsAction="never"/>
 
-
 </menu>
-
