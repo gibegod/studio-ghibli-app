@@ -26,9 +26,6 @@
             android:name=".VehiculosActivity"
             android:exported="false" />
         <activity
-            android:name=".PersonajesActivity"
-            android:exported="false" />
-        <activity
             android:name=".menu"
             android:exported="false" />
         <activity

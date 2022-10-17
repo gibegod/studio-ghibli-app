@@ -10,9 +10,14 @@
         app:showAsAction="always"
         />
 
+    <item
+        android:id="@+id/item_films"
+        android:title="@string/peliculas"
+        app:showAsAction="never"
+        />
 
     <item
-        android:id="@+id/item_Personajes"
+        android:id="@+id/item_people"
         android:title="@string/texto_item_Personajes"
         app:showAsAction="never"
         />

@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
+import com.example.studioghibliapp.models.People
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,8 +29,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var layout: LinearLayout
     lateinit var toolbar: Toolbar
-    lateinit var rvFilms: RecyclerView
-    lateinit var adapter: FilmAdapter
+    lateinit var rvItems: RecyclerView
     private lateinit var itemsSelector: Spinner
     var itemsSelectorOptions = arrayOf<String?>("5", "10", "50")
 
@@ -41,8 +41,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Peliculas"
 
+        rvItems = findViewById(R.id.rv_items)
+
         setupAdapter()
-        setupAdapterRESTService()
+        setupAdapterFilms()
 
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         itemsSelector = findViewById(R.id.sp_items_selector)
@@ -56,7 +58,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         itemsSelector.adapter = aa
     }
 
-    private fun setupAdapterRESTService() {
+    private fun setupAdapterFilms() {
         var responseList: MutableList<Film> = mutableListOf()
 
         val api = retrofit.create(StudioGhibliAPI::class.java)
@@ -80,13 +82,12 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     responseList.add(film)
                 }
 
-                rvFilms = findViewById(R.id.rv_films)
                 FilmAdapter(responseList) {
                     val filmDetailsActivity = Intent(this@MainActivity, FilmDetailsActivity::class.java)
                     filmDetailsActivity.putExtra("FilmID", it.id)
                     startActivity(filmDetailsActivity)
                 }.let {
-                    rvFilms.adapter = it
+                    rvItems.adapter = it
                 }
             }
 
@@ -96,21 +97,45 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
+    private fun setupAdapterPeopleList() {
+        var responseList: MutableList<People> = mutableListOf()
+
+        val api = retrofit.create(StudioGhibliAPI::class.java)
+        val callGetPeopleList = api.getPeople()
+        callGetPeopleList.enqueue(object: Callback<List<People>?> {
+            override fun onResponse(call: Call<List<People>?>, response: Response<List<People>?>) {
+                val peopleRest = response.body()
+
+                peopleRest?.forEach {
+                    var people = People(it.id, it.name, it.gender, it.age)
+                    responseList.add(people)
+                }
+
+                PeopleAdapter(responseList) {}.let {
+                    rvItems.adapter = it
+                }
+            }
+
+            override fun onFailure(call: Call<List<People>?>, t: Throwable) {
+                Log.e("REST", t.message?: "")
+            }
+        })
+    }
+
     private fun setupAdapter() {
         var emptyFilmList: MutableList<Film> = mutableListOf()
 
-        rvFilms = findViewById(R.id.rv_films)
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 FilmAdapter(emptyFilmList) {}.let {
-                    rvFilms.adapter = it
+                    rvItems.adapter = it
                 }
             }
         }
 
         layout = findViewById(R.id.ll_layout)
-        val dividerItemDecoration = DividerItemDecoration(rvFilms.context, layout.orientation)
-        rvFilms.addItemDecoration(dividerItemDecoration)
+        val dividerItemDecoration = DividerItemDecoration(rvItems.context, layout.orientation)
+        rvItems.addItemDecoration(dividerItemDecoration)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -130,9 +155,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
-            R.id.item_Personajes -> {
-                val intent0 = Intent(this@MainActivity, PersonajesActivity::class.java)
-                startActivity(intent0)
+            R.id.item_films -> {
+                setupAdapterFilms();
+                supportActionBar!!.title = "Peliculas"
+            }
+            R.id.item_people -> {
+                setupAdapterPeopleList();
+                supportActionBar!!.title = "Personajes"
             }
             R.id.item_Vehiculos -> {
                 val intent1 = Intent(this@MainActivity, VehiculosActivity::class.java)
