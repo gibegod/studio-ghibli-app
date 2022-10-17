@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import com.example.studioghibliapp.models.Location
 import com.example.studioghibliapp.models.People
+import com.example.studioghibliapp.models.Vehicle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var rvItems: RecyclerView
     private lateinit var itemsSelector: Spinner
     var itemsSelectorOptions = arrayOf<String?>("5", "10", "50")
+    private val api: StudioGhibliAPI = retrofit.create(StudioGhibliAPI::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +64,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun setupAdapterFilms() {
         var responseList: MutableList<Film> = mutableListOf()
 
-        val api = retrofit.create(StudioGhibliAPI::class.java)
         val callGetFilms = api.getFilms()
         callGetFilms.enqueue(object: Callback<List<Film>?> {
             override fun onResponse(call: Call<List<Film>?>, response: Response<List<Film>?>) {
@@ -101,7 +102,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun setupAdapterPeopleList() {
         var responseList: MutableList<People> = mutableListOf()
 
-        val api = retrofit.create(StudioGhibliAPI::class.java)
         val callGetPeopleList = api.getPeople()
         callGetPeopleList.enqueue(object: Callback<List<People>?> {
             override fun onResponse(call: Call<List<People>?>, response: Response<List<People>?>) {
@@ -126,7 +126,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun setupAdapterLocations() {
         var responseList: MutableList<Location> = mutableListOf()
 
-        val api = retrofit.create(StudioGhibliAPI::class.java)
         val callGetLocations = api.getLocations()
         callGetLocations.enqueue(object: Callback<List<Location>?> {
             override fun onResponse(call: Call<List<Location>?>, response: Response<List<Location>?>) {
@@ -143,6 +142,30 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
 
             override fun onFailure(call: Call<List<Location>?>, t: Throwable) {
+                Log.e("REST", t.message?: "")
+            }
+        })
+    }
+
+    private fun setupAdapterVehicles() {
+        var responseList: MutableList<Vehicle> = mutableListOf()
+
+        val callGetVehicles = api.getVehicles()
+        callGetVehicles.enqueue(object: Callback<List<Vehicle>?> {
+            override fun onResponse(call: Call<List<Vehicle>?>, response: Response<List<Vehicle>?>) {
+                val vehiclesRest = response.body()
+
+                vehiclesRest?.forEach {
+                    var vehicle = Vehicle(it.id, it.name, it.description, it.vehicle_class)
+                    responseList.add(vehicle)
+                }
+
+                VehicleAdapter(responseList) {}.let {
+                    rvItems.adapter = it
+                }
+            }
+
+            override fun onFailure(call: Call<List<Vehicle>?>, t: Throwable) {
                 Log.e("REST", t.message?: "")
             }
         })
@@ -189,9 +212,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 setupAdapterPeopleList();
                 supportActionBar!!.title = "Personajes"
             }
-            R.id.item_Vehiculos -> {
-                val intent1 = Intent(this@MainActivity, VehiculosActivity::class.java)
-                startActivity(intent1)
+            R.id.item_vehicles -> {
+                setupAdapterVehicles()
+                supportActionBar!!.title = "Vehículos"
             }
             R.id.item_Especies -> {
                 val intent2 = Intent(this@MainActivity, EspeciesActivity::class.java)

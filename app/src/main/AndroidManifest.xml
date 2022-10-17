@@ -20,9 +20,6 @@
             android:name=".EspeciesActivity"
             android:exported="false" />
         <activity
-            android:name=".VehiculosActivity"
-            android:exported="false" />
-        <activity
             android:name=".menu"
             android:exported="false" />
         <activity
