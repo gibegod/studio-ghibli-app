@@ -31,8 +31,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var rvItems: RecyclerView
     private lateinit var itemsSelector: Spinner
 
-    var itemsSelectorOptions = arrayOf<String?>("5", "10", "50")
-    var itemsQuantity = 50
+    var itemsSelectorOptions = arrayOf<Number?>(5, 10, 50)
 
     private val api: StudioGhibliAPI = retrofit.create(StudioGhibliAPI::class.java)
 
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 var counter = 0;
                 filmsRest?.forEach {
-                    if (counter < itemsQuantity) {
+                    if (counter < itemsSelector.selectedItem.toString().toInt()){
                         val film = Film(
                             it.id,
                             it.title,
@@ -115,7 +114,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 var counter = 0;
                 peopleRest?.forEach {
-                    if (counter < itemsQuantity) {
+                    if (counter < itemsSelector.selectedItem.toString().toInt()) {
                         var people = People(it.id, it.name, it.gender, it.age)
                         responseList.add(people)
                         counter++
@@ -143,7 +142,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 var counter = 0
                 locationsRest?.forEach {
-                    if (counter < itemsQuantity) {
+                    if (counter < itemsSelector.selectedItem.toString().toInt()) {
                         var location = Location(it.id, it.name)
                         responseList.add(location)
                         counter++
@@ -171,7 +170,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 var counter = 0
                 vehiclesRest?.forEach {
-                    if (counter < itemsQuantity) {
+                    if (counter < itemsSelector.selectedItem.toString().toInt()) {
                         var vehicle = Vehicle(it.id, it.name, it.description, it.vehicle_class)
                         responseList.add(vehicle)
                         counter++
@@ -199,7 +198,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 var counter = 0
                 speciesListRest?.forEach {
-                    if (counter < itemsQuantity) {
+                    if (counter < itemsSelector.selectedItem.toString().toInt()) {
                         var species = Species(it.id, it.name, it.classification)
                         responseList.add(species)
                         counter++
@@ -276,8 +275,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     //Performing action onItemSelected and onNothing selected
     override fun onItemSelected(adapterView: AdapterView<*>?, view: View, position: Int, l: Long) {
-        itemsQuantity = itemsSelectorOptions[position]?.toInt() ?: 5
-
         if(supportActionBar!!.title === "Peliculas") {
             setupAdapterFilms()
         } else if(supportActionBar!!.title === "Personajes") {

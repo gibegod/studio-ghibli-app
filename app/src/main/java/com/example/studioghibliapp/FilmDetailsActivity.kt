@@ -54,10 +54,8 @@ class FilmDetailsActivity : AppCompatActivity() {
 
     private fun handleOnClickUndecided() {
         tvUndecided.setOnClickListener {
-            Log.i("PRESIONADO", "PRESIONADO")
-
             val api = RetrofitClient.retrofitYesNoAPI.create(YesNoAPI::class.java)
-            val callYesNo= api.getYesOrNo()
+            val callYesNo = api.getYesOrNo()
             callYesNo.enqueue(object: Callback<YesNo> {
                 override fun onResponse(call: Call<YesNo>, response: Response<YesNo>) {
                     val yesNoResponse = response.body()
