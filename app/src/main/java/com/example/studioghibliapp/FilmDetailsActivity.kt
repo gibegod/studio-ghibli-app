@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.studioghibliapp.models.Film
+import com.example.studioghibliapp.models.YesNo
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,6 +23,9 @@ class FilmDetailsActivity : AppCompatActivity() {
     lateinit var tvDirector: TextView
     lateinit var tvProducer: TextView
     lateinit var tvScore: TextView
+    lateinit var tvUndecided: TextView
+    lateinit var ivYesNoImage: ImageView
+    lateinit var tvYesNoResponse: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +35,8 @@ class FilmDetailsActivity : AppCompatActivity() {
 
         initializeVariables()
         setupAdapterRESTService()
+
+        handleOnClickUndecided()
     }
 
     private fun initializeVariables() {
@@ -41,6 +47,32 @@ class FilmDetailsActivity : AppCompatActivity() {
         tvDirector = findViewById(R.id.tv_director)
         tvProducer = findViewById(R.id.tv_producer)
         tvScore = findViewById(R.id.tv_score)
+        tvUndecided = findViewById(R.id.tv_undecided)
+        ivYesNoImage = findViewById(R.id.iv_yes_no_image)
+        tvYesNoResponse = findViewById(R.id.tv_yes_no_response)
+    }
+
+    private fun handleOnClickUndecided() {
+        tvUndecided.setOnClickListener {
+            Log.i("PRESIONADO", "PRESIONADO")
+
+            val api = RetrofitClient.retrofitYesNoAPI.create(YesNoAPI::class.java)
+            val callYesNo= api.getYesOrNo()
+            callYesNo.enqueue(object: Callback<YesNo> {
+                override fun onResponse(call: Call<YesNo>, response: Response<YesNo>) {
+                    val yesNoResponse = response.body()
+
+                    if (yesNoResponse != null) {
+                        Picasso.get().load(yesNoResponse.image).into(ivYesNoImage)
+                        tvYesNoResponse.text = yesNoResponse.answer.uppercase()
+                    }
+                }
+
+                override fun onFailure(call: Call<YesNo>, t: Throwable) {
+                    Log.e("REST", t.message?: "")
+                }
+            })
+        }
     }
 
     private fun setupAdapterRESTService() {
