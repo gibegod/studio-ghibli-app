@@ -120,6 +120,31 @@
                 android:textSize="15dp"
                 android:layout_marginTop="2dp" />
 
+            <TextView
+                android:id="@+id/tv_undecided"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿No sabés si ver esta pelicula o no? ¡Presioná acá y nosotros decidimos por vos!"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:id="@+id/tv_yes_no_response"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp" />
+
+            <ImageView
+                android:id="@+id/iv_yes_no_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
         </LinearLayout>
 
     </ScrollView>

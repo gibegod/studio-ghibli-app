@@ -30,7 +30,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var toolbar: Toolbar
     lateinit var rvItems: RecyclerView
     private lateinit var itemsSelector: Spinner
-    var itemsSelectorOptions = arrayOf<String?>("5", "10", "50")
+
+    var itemsSelectorOptions = arrayOf<Number?>(5, 10, 50)
+
     private val api: StudioGhibliAPI = retrofit.create(StudioGhibliAPI::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +58,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         //Setting the ArrayAdapter data on the Spinner
         itemsSelector.adapter = aa
+
+        itemsSelector.setSelection(2); // 50
     }
 
     private fun setupAdapterFilms() {
@@ -66,19 +70,23 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             override fun onResponse(call: Call<List<Film>?>, response: Response<List<Film>?>) {
                 val filmsRest = response.body()
 
+                var counter = 0;
                 filmsRest?.forEach {
-                    val film = Film(
-                        it.id,
-                        it.title,
-                        it.image,
-                        it.movie_banner,
-                        it.description,
-                        it.director,
-                        it.release_date,
-                        it.producer,
-                        it.rt_score
-                    )
-                    responseList.add(film)
+                    if (counter < itemsSelector.selectedItem.toString().toInt()){
+                        val film = Film(
+                            it.id,
+                            it.title,
+                            it.image,
+                            it.movie_banner,
+                            it.description,
+                            it.director,
+                            it.release_date,
+                            it.producer,
+                            it.rt_score
+                        )
+                        responseList.add(film)
+                        counter++
+                    }
                 }
 
                 FilmAdapter(responseList) {
@@ -104,9 +112,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             override fun onResponse(call: Call<List<People>?>, response: Response<List<People>?>) {
                 val peopleRest = response.body()
 
+                var counter = 0;
                 peopleRest?.forEach {
-                    var people = People(it.id, it.name, it.gender, it.age)
-                    responseList.add(people)
+                    if (counter < itemsSelector.selectedItem.toString().toInt()) {
+                        var people = People(it.id, it.name, it.gender, it.age)
+                        responseList.add(people)
+                        counter++
+                    }
                 }
 
                 PeopleAdapter(responseList) {}.let {
@@ -128,9 +140,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             override fun onResponse(call: Call<List<Location>?>, response: Response<List<Location>?>) {
                 val locationsRest = response.body()
 
+                var counter = 0
                 locationsRest?.forEach {
-                    var location = Location(it.id, it.name)
-                    responseList.add(location)
+                    if (counter < itemsSelector.selectedItem.toString().toInt()) {
+                        var location = Location(it.id, it.name)
+                        responseList.add(location)
+                        counter++
+                    }
                 }
 
                 LocationAdapter(responseList) {}.let {
@@ -152,9 +168,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             override fun onResponse(call: Call<List<Vehicle>?>, response: Response<List<Vehicle>?>) {
                 val vehiclesRest = response.body()
 
+                var counter = 0
                 vehiclesRest?.forEach {
-                    var vehicle = Vehicle(it.id, it.name, it.description, it.vehicle_class)
-                    responseList.add(vehicle)
+                    if (counter < itemsSelector.selectedItem.toString().toInt()) {
+                        var vehicle = Vehicle(it.id, it.name, it.description, it.vehicle_class)
+                        responseList.add(vehicle)
+                        counter++
+                    }
                 }
 
                 VehicleAdapter(responseList) {}.let {
@@ -176,9 +196,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             override fun onResponse(call: Call<List<Species>?>, response: Response<List<Species>?>) {
                 val speciesListRest = response.body()
 
+                var counter = 0
                 speciesListRest?.forEach {
-                    var species = Species(it.id, it.name, it.classification)
-                    responseList.add(species)
+                    if (counter < itemsSelector.selectedItem.toString().toInt()) {
+                        var species = Species(it.id, it.name, it.classification)
+                        responseList.add(species)
+                        counter++
+                    }
                 }
 
                 SpeciesAdapter(responseList) {}.let {
@@ -251,7 +275,17 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     //Performing action onItemSelected and onNothing selected
     override fun onItemSelected(adapterView: AdapterView<*>?, view: View, position: Int, l: Long) {
-        //Toast.makeText(getApplicationContext(),itemsSelectorOptions[position], Toast.LENGTH_LONG).show();
+        if(supportActionBar!!.title === "Peliculas") {
+            setupAdapterFilms()
+        } else if(supportActionBar!!.title === "Personajes") {
+            setupAdapterPeopleList();
+        } else if(supportActionBar!!.title === "Vehículos") {
+            setupAdapterVehicles()
+        } else if(supportActionBar!!.title === "Especies") {
+            setupAdapterSpeciesList()
+        } else if(supportActionBar!!.title === "Lugares") {
+            setupAdapterLocations();
+        }
     }
 
     override fun onNothingSelected(adapterView: AdapterView<*>?) {

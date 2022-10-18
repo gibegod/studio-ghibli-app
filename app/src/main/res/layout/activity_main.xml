@@ -14,9 +14,10 @@
 
     <Spinner
         android:id="@+id/sp_items_selector"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_gravity="end"
         />
 
     <androidx.recyclerview.widget.RecyclerView
