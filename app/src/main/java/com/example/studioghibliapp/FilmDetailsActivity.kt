@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.appcompat.widget.Toolbar
 import com.example.studioghibliapp.models.Film
 import com.example.studioghibliapp.models.Review
 import com.example.studioghibliapp.models.User
@@ -20,6 +21,7 @@ class FilmDetailsActivity : AppCompatActivity() {
     private var reviewDB: Review? = null
     lateinit var film: Film
 
+    lateinit var toolbar: Toolbar
     lateinit var ivImage: ImageView
     lateinit var tvTitle: TextView
     lateinit var tvDescription: TextView
@@ -72,6 +74,8 @@ class FilmDetailsActivity : AppCompatActivity() {
     }
 
     private fun initializeVariables() {
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
         ivImage = findViewById(R.id.iv_image)
         tvTitle = findViewById(R.id.tv_title)
         tvDescription = findViewById(R.id.tv_description)
@@ -117,6 +121,7 @@ class FilmDetailsActivity : AppCompatActivity() {
                 if(filmRest !== null) {
                     film = filmRest;
 
+                    supportActionBar!!.title = film.title
                     Picasso.get().load(film.movie_banner).into(ivImage)
                     tvTitle.text = film.title
                     tvDescription.text = film.description
