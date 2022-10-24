@@ -1,7 +1,6 @@
 package com.example.studioghibliapp;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.studioghibliapp.models.User;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -67,16 +66,23 @@ public class UserManager {
     }
 
     public boolean logInUser(User user) throws Exception {
-        boolean logUser = false;
+        User userDB = getUserByUsername(user.getUsername());
 
-        QueryBuilder<User, Integer> userQb = dao.queryBuilder();
-        userQb.where().eq("username", user.getUsername());
-
-        if(!userQb.query().isEmpty() && userQb.query().get(0).getPassword().equals(user.getPassword())) {
-            logUser = true;
+        if(userDB != null && userDB.getPassword().equals(user.getPassword())) {
+            return true;
         }
+        return false;
+    }
 
-        return logUser;
+    public User getUserByUsername(String username) throws Exception {
+        QueryBuilder<User, Integer> userQb = dao.queryBuilder();
+        userQb.where().eq("username", username);
+
+        if(!userQb.query().isEmpty()) {
+            return userQb.query().get(0);
+        } else {
+            return null;
+        }
     }
 
     public void createUser(User user) throws Exception {

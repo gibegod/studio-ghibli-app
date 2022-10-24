@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var etUsername: EditText
     lateinit var etPassword: EditText
     lateinit var cbRememberUser: CheckBox
-    private var CHANNEL_ID = "Log in"
+    private var channelId = "Log in"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         val savedUser = sp.getString(Consts.USER, null)
         val savedPassword = sp.getString(Consts.PASSWORD, null)
         if (savedUser != null && savedPassword != null) {
-            startMainActivity()
+            startMainActivity(savedUser)
         }
 
         initialSetup()
@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
         handleOnClickTvSignin()
         handleOnClickBtnLogin()
 
-        createChannel("Log in", "Nofiticación de que el usuario activó la opción \"Recordar Usuario\"")
+        createChannel(channelId, "Nofiticación de que el usuario activó la opción \"Recordar Usuario\"")
     }
 
     private fun initialSetup() {
@@ -91,6 +91,7 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                     return@OnClickListener
                 }
+
                 if (cbRememberUser.isChecked) {
                     val sp = applicationContext.getSharedPreferences(Consts.SP_CREDENTIALS, MODE_PRIVATE)
                     val spEditor = sp.edit()
@@ -103,15 +104,16 @@ class LoginActivity : AppCompatActivity() {
                     NotificationManagerCompat.from(this).notify(1, notification)
                 }
 
-                startMainActivity()
+                startMainActivity(username)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         })
     }
 
-    private fun startMainActivity() {
+    private fun startMainActivity(username: String) {
         val mainActivity = Intent(this@LoginActivity, MainActivity::class.java)
+        mainActivity.putExtra("Username", username)
         startActivity(mainActivity)
         finish()
     }
@@ -122,7 +124,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID,
+                channelId,
                 channelName,
                 NotificationManager.IMPORTANCE_LOW
             )
@@ -132,7 +134,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun createNotification(): Notification {
-        return NotificationCompat.Builder(this, CHANNEL_ID)
+        return NotificationCompat.Builder(this, channelId)
             .setContentText("Se activó la funcionalidad de \"Recordar Usuario\"")
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setSmallIcon(R.drawable.ic_baseline_save_24)

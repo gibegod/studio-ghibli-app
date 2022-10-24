@@ -1,22 +1,18 @@
 package com.example.studioghibliapp
 
-import com.example.studioghibliapp.RetrofitClient.retrofit
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.AdapterView
-import android.widget.LinearLayout
-import androidx.recyclerview.widget.RecyclerView
-import android.widget.Spinner
-import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.content.Intent
-import androidx.recyclerview.widget.DividerItemDecoration
+import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import com.example.studioghibliapp.RetrofitClient.retrofit
 import com.example.studioghibliapp.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +26,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var toolbar: Toolbar
     lateinit var rvItems: RecyclerView
     private lateinit var itemsSelector: Spinner
+    lateinit var username: String
 
     var itemsSelectorOptions = arrayOf<Number?>(5, 10, 50)
 
@@ -38,6 +35,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        username = intent.getStringExtra("Username").toString()
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -92,6 +91,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 FilmAdapter(responseList) {
                     val filmDetailsActivity = Intent(this@MainActivity, FilmDetailsActivity::class.java)
                     filmDetailsActivity.putExtra("FilmID", it.id)
+                    filmDetailsActivity.putExtra("Username", username)
                     startActivity(filmDetailsActivity)
                 }.let {
                     rvItems.adapter = it
